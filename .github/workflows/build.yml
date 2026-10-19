@@ -65,12 +65,19 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: { name: kitty-snake-windows, path: builds/KittySnake-windows.zip }
 
+      - name: Android diagnostics
+        run: |
+          echo "SDKLAYOUT: $(ls $ANDROID_HOME | tr '\n' ' ')"
+          echo "SDKLAYOUT cmdline-tools: $(ls $ANDROID_HOME/cmdline-tools | tr '\n' ' ')"
+          echo "SDKLAYOUT build-tools: $(ls $ANDROID_HOME/build-tools | tr '\n' ' ')"
+          echo "SDKLAYOUT platforms: $(ls $ANDROID_HOME/platforms | tr '\n' ' ')"
+          echo "SDKLAYOUT templates: $(ls ~/.local/share/godot/export_templates/4.3.stable | grep -i android | tr '\n' ' ')"
+          echo "SDKLAYOUT java: $JAVA_HOME $(ls $JAVA_HOME/bin | grep -c .)"
+
       - name: Export Android debug APK
         run: |
-          echo "--- SDK layout"; ls $ANDROID_HOME $ANDROID_HOME/cmdline-tools $ANDROID_HOME/build-tools $ANDROID_HOME/platforms || true
-          echo "--- editor settings"; cat ~/.config/godot/editor_settings-4.3.tres || true
           mkdir -p builds/android
-          godot --headless --verbose --path . --export-debug "Android Debug" builds/android/KittySnake-debug.apk 2>&1 | grep -v savepack | tail -60
+          godot --headless --path . --export-debug "Android Debug" builds/android/KittySnake-debug.apk 2>&1 | grep -v savepack | tail -30
           test -f builds/android/KittySnake-debug.apk
 
       - uses: actions/upload-artifact@v4
