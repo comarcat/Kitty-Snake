@@ -20,7 +20,7 @@ jobs:
           export ANDROID_HOME=${ANDROID_HOME:-/usr/local/lib/android/sdk}
           SM=$(ls $ANDROID_HOME/cmdline-tools/*/bin/sdkmanager | head -1)
           yes | $SM --licenses >/dev/null || true
-          $SM "platform-tools" "build-tools;34.0.0" "platforms;android-34" "cmdline-tools;latest"
+          $SM "platform-tools" "build-tools;34.0.0" "platforms;android-34"
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
 
       - name: Install Godot + export templates
@@ -55,15 +55,23 @@ jobs:
           EOS
           sed -i 's/^          //' ~/.config/godot/editor_settings-4.3.tres
 
-      - name: Export Web, Windows, Android (debug APK)
+      - name: Export Web + Windows
         run: |
           tools/export.sh web
           tools/export.sh windows
-          tools/export.sh android-debug
 
       - uses: actions/upload-artifact@v4
         with: { name: kitty-snake-web, path: builds/web }
       - uses: actions/upload-artifact@v4
         with: { name: kitty-snake-windows, path: builds/KittySnake-windows.zip }
+
+      - name: Export Android debug APK
+        run: |
+          echo "--- SDK layout"; ls $ANDROID_HOME $ANDROID_HOME/cmdline-tools $ANDROID_HOME/build-tools $ANDROID_HOME/platforms || true
+          echo "--- editor settings"; cat ~/.config/godot/editor_settings-4.3.tres || true
+          mkdir -p builds/android
+          godot --headless --verbose --path . --export-debug "Android Debug" builds/android/KittySnake-debug.apk 2>&1 | grep -v savepack | tail -60
+          test -f builds/android/KittySnake-debug.apk
+
       - uses: actions/upload-artifact@v4
         with: { name: kitty-snake-android-debug, path: builds/android/KittySnake-debug.apk }
