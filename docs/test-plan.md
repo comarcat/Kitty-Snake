@@ -12,7 +12,7 @@ arena validation, save recovery, reduce motion, pause) plus speed curve and scis
 - [ ] Web over HTTP on desktop browser  — *smoke-tested in headless Chromium: loads, plays, pauses, game-over, arenas*
 - [ ] Web on mobile browser with touch D-pad
 - [ ] Windows portable build on a clean machine/VM (built, **not yet run**)
-- [ ] Android APK on a device/emulator (**not yet built here**; CI workflow provided)
+- [ ] Android APK on a device/emulator (**APK builds in CI; not yet installed or run on any device**)
 - [ ] All 4 arenas playable on each target (Web: Backyard + Living Room viewed in-game; all 4 validated by tests)
 - [ ] Easy/Normal/Hard speeds feel correct
 - [ ] Keyboard / gamepad / touch inputs
