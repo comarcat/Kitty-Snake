@@ -1,0 +1,19 @@
+{
+  "id": "living_room", "name": "Living Room", "theme": "living_room",
+  "description": "Wooden floor, a rug, a sofa and a table.",
+  "colors": {"bg_a": "#c98f55", "bg_b": "#c08850", "border": "#6b4226", "decor": "#a8703f", "accent": "#e2506b", "carpet": "#8e5aa8", "carpet_b": "#9d68b6"},
+  "obstacle_styles": {"primary": "sofa", "secondary": "table"},
+  "music": {"root": 57, "step": 0.24, "wave": "tri", "melody": [0,3,7,10,12,10,7,3,0,5,8,12,8,5,3,0]},
+  "map": [
+    "....................",
+    ".####...........##..",
+    "....................",
+    "............ww......",
+    "............ww......",
+    "....S...............",
+    "....................",
+    ".##.........#####...",
+    "....................",
+    "...................."
+  ]
+}

@@ -1,0 +1,10 @@
+.godot/
+.import/
+builds/
+exports/*
+!exports/.gitkeep
+*.keystore
+*.jks
+export_credentials.cfg
+android/
+.mono/

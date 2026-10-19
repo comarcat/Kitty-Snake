@@ -1,0 +1,9 @@
+{
+  "items": [
+    {"id": "fish",    "name": "Fish",        "score": 10,  "growth": 1,  "weight": 50, "enabled": true},
+    {"id": "milk",    "name": "Milk",        "score": 15,  "growth": 1,  "weight": 30, "enabled": true},
+    {"id": "yarn",    "name": "Yarn ball",   "score": 30,  "growth": 3,  "weight": 12, "enabled": true},
+    {"id": "golden",  "name": "Golden fish", "score": 100, "growth": 5,  "weight": 3,  "enabled": true},
+    {"id": "scissors","name": "Scissors",    "score": 0,   "growth": -3, "weight": 5,  "enabled": false}
+  ]
+}

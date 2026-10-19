@@ -1,0 +1,19 @@
+{
+  "id": "backyard", "name": "Backyard", "theme": "backyard",
+  "description": "Grass and flowers. Rocks appear on Normal and Hard.",
+  "colors": {"bg_a": "#7ec850", "bg_b": "#74be48", "border": "#9b6a3a", "decor": "#f4a6c8", "accent": "#ffe066"},
+  "obstacle_styles": {"primary": "rock", "secondary": "rock"},
+  "music": {"root": 60, "step": 0.2, "wave": "square", "melody": [0,4,7,12,7,4,0,4,2,5,9,14,9,5,2,5]},
+  "map": [
+    "....................",
+    "......n........h....",
+    "....................",
+    "..h.........n.......",
+    "....................",
+    "....S...............",
+    "....................",
+    "...........n....h...",
+    "..n.................",
+    "...................."
+  ]
+}

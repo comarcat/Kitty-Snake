@@ -1,0 +1,19 @@
+{
+  "id": "garden", "name": "Garden", "theme": "garden",
+  "description": "Paths, hedges, flowerbeds and a small pond.",
+  "colors": {"bg_a": "#5fae4b", "bg_b": "#58a545", "border": "#3d7a34", "decor": "#e85d9c", "accent": "#ffd166", "path": "#d9c79a", "path_b": "#cdbb8c"},
+  "obstacle_styles": {"primary": "hedge", "secondary": "pond"},
+  "music": {"root": 62, "step": 0.22, "wave": "square", "melody": [0,2,4,7,9,7,4,2,0,4,7,11,9,7,4,2]},
+  "map": [
+    "....................",
+    "..####.........####.",
+    "....................",
+    ".........www........",
+    ".........www........",
+    "....S...............",
+    "....................",
+    ".####...........##..",
+    "....................",
+    "...#...........#...."
+  ]
+}

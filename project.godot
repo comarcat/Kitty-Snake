@@ -1,0 +1,37 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Kitty Snake: Yarn Trails"
+config/description="Offline grid-based arcade Snake with a kitten and a yarn trail."
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+run/max_fps=60
+boot_splash/bg_color=Color(0.168, 0.106, 0.239, 1)
+config/icon="res://icon.svg"
+
+[autoload]
+
+Save="*res://scripts/services/save_service.gd"
+Sfx="*res://scripts/services/audio_service.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=0

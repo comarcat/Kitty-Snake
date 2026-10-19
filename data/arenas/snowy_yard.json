@@ -1,0 +1,19 @@
+{
+  "id": "snowy_yard", "name": "Snowy Yard", "theme": "snowy_yard",
+  "description": "Snow, pine trees and snowmen. Looks icy, plays normally.",
+  "colors": {"bg_a": "#e8f1f8", "bg_b": "#dce9f3", "border": "#7a5a3a", "decor": "#ffffff", "accent": "#7ec8e3"},
+  "obstacle_styles": {"primary": "snow_tree", "secondary": "snowman"},
+  "music": {"root": 64, "step": 0.26, "wave": "tri", "melody": [0,7,12,7,5,12,16,12,0,7,12,16,14,12,7,5]},
+  "map": [
+    "....................",
+    "..#.........#.......",
+    "....................",
+    ".......w............",
+    ".............#......",
+    "....S...............",
+    "...#................",
+    "..........w.........",
+    ".#..............#...",
+    "...................."
+  ]
+}
