@@ -8,11 +8,15 @@ Built with **Godot 4.3** as **one shared codebase** exported to **Web (HTML5)**,
 |---|---|
 | ![Backyard arena](docs/screenshots/backyard.png) | ![Living Room arena](docs/screenshots/living-room.png) |
 
+| Garden | Snowy Yard |
+|---|---|
+| ![Garden arena](docs/screenshots/garden.png) | ![Snowy Yard arena](docs/screenshots/snowy-yard.png) |
+
 | Title | Arena select |
 |---|---|
 | ![Title screen](docs/screenshots/title.png) | ![Arena select](docs/screenshots/arena-select.png) |
 
-> All art and sound are original placeholders generated in code. Final artwork is still to come.
+> All art and sound are original, drawn and generated in code (16-bit style, 32px cells). Final artwork is still to come.
 
 ## Features
 
@@ -75,7 +79,7 @@ Full export notes (signing, AAB, package ID, hosting): [`docs/build-and-export.m
 godot --headless --path . --import
 godot --headless --path . --script tests/run_tests.gd
 ```
-40 headless checks cover movement, turn buffering, growth, tail and collision rules, item spawning, deterministic replays, arena validation, save-file recovery, reduce-motion and pause. Manual checklist: [`docs/test-plan.md`](docs/test-plan.md).
+46 headless checks cover movement, turn buffering, growth, tail and collision rules, item spawning, deterministic replays, arena validation, save-file recovery, reduce-motion, pause and smooth-motion (no jumps or stalls at 60 FPS). Manual checklist: [`docs/test-plan.md`](docs/test-plan.md).
 
 ## Project layout
 

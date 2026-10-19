@@ -2,7 +2,7 @@ class_name YarnMath
 extends RefCounted
 ## Pure visual helpers for the yarn line. Never used by the simulation.
 
-const WIGGLE_AMPLITUDE := 0.9
+const WIGGLE_AMPLITUDE := 1.8
 
 static func wiggle(index: int, time: float, amp: float, reduce_motion: bool) -> float:
 	if reduce_motion:

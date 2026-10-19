@@ -1,8 +1,8 @@
 extends Control
 ## Root: builds the 320x180 pixel viewport, HUD, touch controls and menu screens, and routes flow.
 
-const VIEW_W := 320.0
-const VIEW_H := 180.0
+const VIEW_W := 640.0
+const VIEW_H := 360.0
 
 var viewport: SubViewport
 var game_view: GameView
@@ -79,6 +79,7 @@ func _ready() -> void:
 	controller.score_changed.connect(func(s): score_label.text = "Score %d" % s)
 	controller.finished.connect(_on_finished)
 	add_child(controller)
+	game_view.controller = controller
 
 	_add_screen("title", TitleScreen.new(arenas))
 	_add_screen("arena", ArenaScreen.new(arenas))
@@ -120,8 +121,8 @@ func show_screen(id: String) -> void:
 
 func _show_menu_backdrop() -> void:
 	game_view.state = null
-	game_view.board = ArenaData.build(arenas[Save.get_setting("last_arena")], 1)["board"]
-	game_view.arena = arenas[Save.get_setting("last_arena")]
+	var a: Dictionary = arenas[Save.get_setting("last_arena")]
+	game_view.show_arena(a, ArenaData.build(a, 1)["board"])
 
 # --- flow -------------------------------------------------------------------
 
@@ -149,8 +150,8 @@ func _navigate(target: String) -> void:
 func start_game() -> void:
 	var arena: Dictionary = arenas[Save.get_setting("last_arena")]
 	var diff := GameRules.difficulty(Save.get_setting("last_difficulty"))
-	game_view.arena = arena
 	controller.begin(arena, diff)
+	game_view.show_arena(arena, controller.state.board)
 	game_view.state = controller.state
 	score_label.text = "Score 0"
 	best_label.text = "Best %d" % Save.high_score(arena["id"], diff["id"])
@@ -235,12 +236,6 @@ func _on_settings_changed() -> void:
 	adapter.swipe_enabled = Save.get_setting("touch_mode") == "swipe"
 	_layout()
 
-func _process(_delta: float) -> void:
-	if controller.state != null and controller.phase != "idle":
-		game_view.alpha = controller.clock.alpha() if controller.phase == "running" else game_view.alpha
-		if controller.phase == "countdown":
-			game_view.alpha = 1.0
-
 # --- layout -----------------------------------------------------------------
 
 func _touch_mode() -> String:
@@ -279,7 +274,7 @@ func _layout() -> void:
 			var bottom := (u * 3.0 + m * 2.0) if mode == "dpad" else 0.0
 			avail = Rect2(0, top, sz.x, sz.y - top - bottom)
 	var scale := minf(avail.size.x / VIEW_W, avail.size.y / VIEW_H)
-	if scale >= 2.0:
+	if scale >= 1.0:
 		scale = floorf(scale)
 	scale = maxf(scale, 0.5)
 	var gsize := Vector2(VIEW_W, VIEW_H) * scale
@@ -287,7 +282,7 @@ func _layout() -> void:
 	view_rect.position = _game_rect.position
 	view_rect.size = gsize
 
-	var band := 20.0 * scale
+	var band := 40.0 * scale
 	hud.position = _game_rect.position
 	hud.size = Vector2(gsize.x, band)
 	var fs := int(maxf(12.0, band * 0.6))

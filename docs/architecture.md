@@ -13,7 +13,7 @@ input (`InputAdapter`, `TouchControls`), layout (`main.gd`), lifecycle notificat
 | Services | `scripts/services/*` | `Save` (versioned JSON in `user://`), `Sfx` (procedural audio). Autoloads. |
 | UI | `scripts/ui/*` | Menus built in code; `main.gd` owns layout and flow. |
 
-Display: 320x180 SubViewport (20px HUD band + 320x160 board) shown at integer scale when >= 2x. Menus/HUD text/touch
+Display: 640x360 SubViewport (40px HUD band + 640x320 board, 32px cells for 16-bit-style detail) shown at integer scale when >= 1x. Background art is cached; input can trigger an "early tick" once the head is past mid-cell (TickDriver) so turns feel instant while motion stays continuous (VisualTrack). Menus/HUD text/touch
 controls are native-resolution UI so they stay crisp and touch-sized. Touch controls reserve screen space beside the
 board (landscape) or below it (portrait) and never overlap cells.
 

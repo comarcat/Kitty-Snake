@@ -3,12 +3,12 @@ extends Control
 
 var arena: Dictionary
 var board: GridBoard
-const S := 0.62
+const S := 0.31
 
 func setup(p_arena: Dictionary) -> void:
 	arena = p_arena
 	board = ArenaData.build(arena, 1)["board"]
-	custom_minimum_size = Vector2(320 * S, 160 * S)
+	custom_minimum_size = Vector2(640 * S, 320 * S)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _draw() -> void:

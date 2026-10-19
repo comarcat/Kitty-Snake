@@ -36,6 +36,7 @@ func _init() -> void:
 	t14_pause()
 	t15_speed()
 	t16_scissors()
+	t17_smooth_motion()
 	print("\n%d passed, %d failed" % [passed, failed])
 	quit(1 if failed > 0 else 0)
 
@@ -194,8 +195,8 @@ func t14_pause() -> void:
 func t15_speed() -> void:
 	var easy := GameRules.difficulty("easy")
 	var hard := GameRules.difficulty("hard")
-	check(is_equal_approx(GameRules.speed_for(easy, 0), 4.0) and is_equal_approx(GameRules.speed_for(easy, 5), 4.15), "15 easy speed steps +0.15 per 5 items")
-	check(is_equal_approx(GameRules.speed_for(hard, 1000), 12.0), "15 speed capped at 12")
+	check(is_equal_approx(GameRules.speed_for(easy, 0), 5.0) and is_equal_approx(GameRules.speed_for(easy, 5), 5.15), "15 easy speed steps +0.15 per 5 items")
+	check(is_equal_approx(GameRules.speed_for(hard, 1000), 13.0), "15 speed capped at 13")
 
 func t16_scissors() -> void:
 	var s := make_state()
@@ -203,3 +204,45 @@ func t16_scissors() -> void:
 	s.pickups.append({"cell": Vector2i(7, 5), "item": {"id": "scissors", "score": 0, "growth": -3, "weight": 1}})
 	s.step()
 	check(s.body.size() == 3, "16 scissors never shorten below minimum 2 yarn segments")
+
+## Simulates 60 FPS frames with a mid-cell turn; the head must never jump, stall or reverse.
+func t17_smooth_motion() -> void:
+	var st := GameState.new(GridBoard.new(20, 10), ItemRules.load_items(), 3, Vector2i(3, 5))
+	st.pickups.clear()
+	st.max_pickups = 0
+	var drv := TickDriver.new(st, GameRules.difficulty("normal"))
+	var last := drv.points()[0]
+	var max_step := 0.0
+	var min_step := 1000.0
+	var turn_frames := {45: Vector2i.UP, 75: Vector2i.RIGHT, 100: Vector2i.DOWN}
+	var worst_back := 0.0
+	for f in 130:
+		if turn_frames.has(f):
+			drv.turn(turn_frames[f])
+		if drv.advance(1.0 / 60.0) or not st.alive:
+			break
+		var p := drv.points()[0]
+		var step := p.distance_to(last)
+		if f > 2:
+			max_step = maxf(max_step, step)
+			min_step = minf(min_step, step)
+		last = p
+	check(st.alive, "17 smooth run stayed alive")
+	check(max_step <= 8.0, "17 head never jumps (max %.2f px/frame)" % max_step)
+	check(min_step >= 0.5, "17 head never stalls (min %.2f px/frame)" % min_step)
+	var s2 := make_state()
+	var d2 := TickDriver.new(s2, GameRules.difficulty("normal"))
+	d2.advance(0.001)  # initial tick
+	d2.advance(0.02)
+	var t0 := s2.ticks
+	d2.turn(Vector2i.UP)
+	check(s2.turns.pending.size() == 1 and s2.ticks == t0, "17 turn early in a cell waits for the regular tick")
+	d2.advance(0.13)
+	check(s2.ticks == t0 + 1 and s2.dir == Vector2i.UP, "17 turn consumed on the next tick")
+	var s3 := make_state()
+	var d3 := TickDriver.new(s3, GameRules.difficulty("normal"))
+	d3.advance(0.001)  # initial tick
+	d3.advance(0.08)
+	var u0 := s3.ticks
+	d3.turn(Vector2i.UP)
+	check(s3.ticks == u0 + 1 and s3.dir == Vector2i.UP, "17 turn past mid-cell applies immediately (early tick)")

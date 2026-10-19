@@ -25,3 +25,6 @@ func advance(delta: float) -> int:
 
 func alpha() -> float:
 	return clampf(accumulator / interval, 0.0, 1.0)
+
+func reset() -> void:
+	accumulator = 0.0

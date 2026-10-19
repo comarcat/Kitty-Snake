@@ -1,6 +1,6 @@
 class_name GameController
 extends Node
-## Orchestrates a run: countdown, fixed-tick stepping, pause, finish + scoring.
+## Orchestrates a run: countdown, pause, finish + scoring. Tick logic lives in TickDriver.
 
 signal phase_changed(phase: String)
 signal countdown_changed(n: int)
@@ -9,8 +9,8 @@ signal finished(info: Dictionary)
 
 const COUNTDOWN := 3.0
 
+var driver: TickDriver
 var state: GameState
-var clock := TickClock.new()
 var arena: Dictionary = {}
 var difficulty: Dictionary = {}
 var phase := "idle"  # idle | countdown | running | paused | over
@@ -26,8 +26,7 @@ func begin(p_arena: Dictionary, p_diff: Dictionary, p_seed: int = -1) -> void:
 	state = GameState.new(built["board"], ItemRules.load_items(), seed_val, built["spawn"])
 	state.score_changed.connect(func(s): score_changed.emit(s))
 	state.item_collected.connect(_on_item)
-	clock = TickClock.new()
-	clock.set_speed(GameRules.speed_for(difficulty, 0))
+	driver = TickDriver.new(state, difficulty)
 	_cd = COUNTDOWN
 	_last_n = -1
 	_set_phase("countdown")
@@ -35,19 +34,30 @@ func begin(p_arena: Dictionary, p_diff: Dictionary, p_seed: int = -1) -> void:
 func is_playing() -> bool:
 	return phase == "countdown" or phase == "running"
 
+func visual_alpha() -> float:
+	return driver.alpha() if (phase == "running" or phase == "paused") else 1.0
+
+func visual_points() -> Array[Vector2]:
+	return driver.track.points(state, visual_alpha(), TickDriver.CELL_PX)
+
 func turn(dir: Vector2i) -> void:
-	if is_playing() and state != null:
+	if state == null:
+		return
+	if phase == "running":
+		if driver.turn(dir):
+			_finish()
+	elif phase == "countdown":
 		state.queue_turn(dir)
 
 func pause() -> void:
 	if is_playing():
 		_resume_phase = phase
-		clock.paused = true
+		driver.clock.paused = true
 		_set_phase("paused")
 
 func resume() -> void:
 	if phase == "paused":
-		clock.paused = false
+		driver.clock.paused = false
 		_set_phase(_resume_phase)
 
 func _set_phase(p: String) -> void:
@@ -72,12 +82,8 @@ func _process(delta: float) -> void:
 			if _cd <= 0.0:
 				_set_phase("running")
 		"running":
-			for _i in clock.advance(delta):
-				state.step()
-				clock.set_speed(GameRules.speed_for(difficulty, state.collected))
-				if state.is_finished():
-					_finish()
-					break
+			if driver.advance(delta):
+				_finish()
 
 func _finish() -> void:
 	_set_phase("over")
