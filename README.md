@@ -71,6 +71,12 @@ tools/export.sh windows                   # -> builds/windows/, builds/KittySnak
 tools/export.sh android-debug             # -> builds/android/KittySnake-debug.apk
 ```
 
+On Windows, install Godot 4.3-stable with its matching export templates, add `godot.exe` to `PATH`, then run PowerShell from the project folder:
+```powershell
+.\tools\export.ps1 windows                # -> builds\windows\KittySnake.exe + .pck and builds\KittySnake-windows.zip
+```
+Unzip `builds\KittySnake-windows.zip` and run `KittySnake.exe`; keep the `.pck` beside it. To launch the project in the Godot editor instead, open this folder and press F5.
+
 Full export notes (signing, AAB, package ID, hosting): [`docs/build-and-export.md`](docs/build-and-export.md).
 
 ## Tests
